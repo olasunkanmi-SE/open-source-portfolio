@@ -1,3 +1,4 @@
+import { Github } from "lucide-react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -19,7 +20,9 @@ export const NavBar = () => {
             <NavDropdown.Divider />
             <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
           </NavDropdown>
-          <Nav.Link href="#action1">Home</Nav.Link>
+          <Nav.Link href="#action1">
+            Github <Github />
+          </Nav.Link>
           <Form style={{ fontSize: "14px", fontWeight: 300 }} className="d-flex">
             <Form.Control type="search" placeholder="Search" className="me-2" aria-label="Search" />
             <Button variant="outline-success">Search</Button>

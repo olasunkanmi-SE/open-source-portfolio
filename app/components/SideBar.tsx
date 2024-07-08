@@ -47,13 +47,14 @@ const Sidebar: React.FC = () => {
   return (
     <div className="sidebar ">
       <Nav className="flex-column w-100">
-        <SidebarItem label="How to install" />
-        <SidebarItem label="Usage" />
+        <SidebarItem label="CODEBUDDY" />
+        <SidebarItem label="Feature Guide" />
         <SidebarItem label="Overview" />
-        <SidebarItem label="Api">
-          <SidebarItem label="SidebarMenu" level={1}>
-            <SidebarItem label="Built-in elements" level={2} />
-          </SidebarItem>
+        <SidebarItem label="Chat">
+          <SidebarItem label="Explain" level={1} />
+          <SidebarItem label="Refactor" level={1} />
+          <SidebarItem label="Optimize" level={1} />
+          <SidebarItem label="Send to Ola" level={1} />
         </SidebarItem>
       </Nav>
     </div>
