@@ -1,3 +1,58 @@
 body {
     height: 100%;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.dropdown-item {
+    font-weight: 300 !important;
+    font-size: 14px !important;
+}
+
+.sidebar {
+    width: 250px;
+    height: calc(100vh - 56px);
+    position: fixed;
+    top: 56px;
+    left: 0;
+    overflow-y: auto;
+    border-right: 1px solid #f3f3f3;
+    background-color: #fdfdfd;
+}
+
+.sidebar-item {
+    padding: 0.5rem 1rem;
+    color: #000 !important;
+    border-bottom: 1px solid #f3f3f3;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-item:hover {
+    background-color: #f3f3f3;
+}
+
+.level-1 {
+    padding-left: 2rem;
+}
+
+.level-2 {
+    padding-left: 3rem;
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+}
+
+.submenu-container {
+    overflow: hidden;
+    transition: height 0.3s ease-in-out;
+}
+
+.chevron {
+    transition: transform 0.3s ease;
+}
+
+.chevron.open {
+    transform: rotate(90deg);
 }

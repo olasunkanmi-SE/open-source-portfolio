@@ -14,8 +14,12 @@
     "@remix-run/node": "^2.10.2",
     "@remix-run/react": "^2.10.2",
     "@remix-run/serve": "^2.10.2",
+    "bootstrap": "^5.3.3",
     "isbot": "^4.1.0",
+    "lucide-react": "^0.402.0",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.10.4",
+    "react-bootstrap-sidebar-menu": "^2.0.3",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {

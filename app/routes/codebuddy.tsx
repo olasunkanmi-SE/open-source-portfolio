@@ -1,9 +1,12 @@
 import { Outlet } from "react-router";
+import { NavBar } from "~/components/NavBar";
+import Sidebar from "~/components/SideBar";
 
 export default function CodeBuddy() {
   return (
     <div>
-      <p>I am default CodeBuddyOutlet</p>
+      <NavBar />
+      <Sidebar />
       <div>
         <Outlet />
       </div>
