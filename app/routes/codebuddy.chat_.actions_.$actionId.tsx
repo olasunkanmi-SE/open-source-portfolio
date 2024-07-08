@@ -1,7 +1,7 @@
 export default function Chat() {
   return (
     <div>
-      <p>I am command</p>
+      <p>I am actionId</p>
     </div>
   );
 }
