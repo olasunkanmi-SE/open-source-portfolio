@@ -1,4 +1,4 @@
-# Developer Portfolio & Open Source Projects
+# Portfolio & Open Source Projects
 
 Welcome to my GitHub repository! This space serves as both my personal portfolio and a showcase for my open-source projects. I'm passionate about creating innovative solutions that enhance user experiences and streamline processes in various domains.
 
