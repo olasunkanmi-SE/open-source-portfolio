@@ -1,12 +1,14 @@
 import { Github } from "lucide-react";
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import SearchForm from "./SearchForm";
 
 export const NavBar = () => {
+  const handleSearch = (searchTerm: string) => {
+    console.log("Searching for", searchTerm);
+  };
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
@@ -23,10 +25,12 @@ export const NavBar = () => {
           <Nav.Link href="#action1">
             Github <Github />
           </Nav.Link>
-          <Form style={{ fontSize: "14px", fontWeight: 300 }} className="d-flex">
-            <Form.Control type="search" placeholder="Search" className="me-2" aria-label="Search" />
-            <Button variant="outline-success">Search</Button>
-          </Form>
+          <SearchForm
+            onSearch={handleSearch}
+            buttonText="Find"
+            placeholder="Enter search term..."
+            buttonVariant="primary"
+          />
         </Navbar.Collapse>
       </Container>
     </Navbar>
