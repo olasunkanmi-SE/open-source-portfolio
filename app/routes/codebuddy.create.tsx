@@ -1,6 +1,8 @@
-import { AtSign, Check, Image, MessageSquare, Paperclip } from "lucide-react";
+import { Check } from "lucide-react";
 import { useState } from "react";
-import { Button, Container, Dropdown, Form, Nav } from "react-bootstrap";
+import { Button, Container, Form, Nav } from "react-bootstrap";
+import CustomDropdown from "~/components/DropDown";
+import ImageUploader from "~/components/ImageUploader";
 
 const formWrapperStyle = {
   border: "1px solid #e0e0e0",
@@ -15,6 +17,28 @@ const PostCreationForm = () => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
 
+  const categoryOptions = [
+    { key: "1", label: "Chat", href: "#/action-1" },
+    { key: "2", label: "StandAlone", href: "#/action-2" },
+    { key: "3", label: "Others", href: "#/action-3" },
+  ];
+
+  const handleCategorySelect = (selectedOption: { key: string; label: string; href?: string }) => {
+    console.log("Selected category:", selectedOption.label);
+    // Handle the selection here
+  };
+
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+
+  const handleUploadSuccess = (url: string) => {
+    setUploadedImageUrl(url);
+    console.log("Image uploaded successfully:", url);
+  };
+
+  const handleUploadError = (error: Error) => {
+    console.error("Image upload failed:", error);
+  };
+
   return (
     <Container className="mt-3">
       <div style={formWrapperStyle}>
@@ -28,23 +52,7 @@ const PostCreationForm = () => {
         </Nav>
 
         <Form>
-          <Dropdown className="mb-3">
-            <Dropdown.Toggle variant="light" id="dropdown-squad">
-              Select post Category
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Chat</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">StandAlone</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Others</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-
-          <div className="mb-3">
-            <Button variant="outline-secondary" className="d-flex align-items-center">
-              <Image size={18} className="me-2" /> Thumbnail
-            </Button>
-          </div>
-
+          <CustomDropdown options={categoryOptions} onSelect={handleCategorySelect} toggleText="Select post Category" />
           <Form.Group className="mb-3" controlId="postTitle">
             <Form.Control
               type="text"
@@ -81,15 +89,13 @@ const PostCreationForm = () => {
 
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <Button variant="link" className="text-muted p-0 me-2">
-                <Paperclip size={18} />
-              </Button>
-              <Button variant="link" className="text-muted p-0 me-2">
-                <AtSign size={18} />
-              </Button>
-              <Button variant="link" className="text-muted p-0">
-                <MessageSquare size={18} />
-              </Button>
+              <ImageUploader onUploadSuccess={handleUploadSuccess} onUploadError={handleUploadError} />
+              {uploadedImageUrl && (
+                <div>
+                  <h3>Uploaded Image:</h3>
+                  <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: "300px" }} />
+                </div>
+              )}
             </div>
             <Button variant="dark">Post</Button>
           </div>
