@@ -2,10 +2,20 @@ import { Github } from "lucide-react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import SearchForm from "./SearchForm";
+import CustomDropdown from "./DropDown";
 
 export const NavBar = () => {
+  const categoryOptions = [
+    { key: "1", label: "CodeBuddy", href: "#/action-1" },
+    { key: "2", label: "Intellisearch", href: "#/action-2" },
+    { key: "3", label: "Reataurant", href: "#/action-3" },
+  ];
+
+  const handleCategorySelect = (selectedOption: { key: string; label: string; href?: string }) => {
+    console.log("Selected category:", selectedOption.label);
+    // Handle the selection here
+  };
   const handleSearch = (searchTerm: string) => {
     console.log("Searching for", searchTerm);
   };
@@ -16,12 +26,13 @@ export const NavBar = () => {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll></Nav>
-          <NavDropdown style={{ fontSize: "14px" }} title="Link" id="navbarScrollingDropdown">
-            <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-            <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
-          </NavDropdown>
+          <CustomDropdown
+            className="mb-1"
+            options={categoryOptions}
+            onSelect={handleCategorySelect}
+            toggleText="Products"
+            variant="transparent"
+          />
           <Nav.Link href="#action1">
             Github <Github />
           </Nav.Link>
