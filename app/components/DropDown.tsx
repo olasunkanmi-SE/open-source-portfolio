@@ -19,7 +19,7 @@ interface CustomDropdownProps {
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
   options,
   onSelect,
-  toggleText = "Select post Category",
+  toggleText = "",
   variant = "light",
   id = "dropdown-custom",
   className = "mb-3",

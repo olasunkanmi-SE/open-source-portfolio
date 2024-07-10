@@ -3,9 +3,7 @@ import { Form } from "react-bootstrap";
 
 interface SearchFormProps {
   onSearch: (searchTerm: string) => void;
-  buttonText?: string;
   placeholder?: string;
-  buttonVariant?: string;
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({ onSearch, placeholder = "Search" }) => {

@@ -4,17 +4,18 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import SearchForm from "./SearchForm";
 import CustomDropdown from "./DropDown";
+import { useState } from "react";
 
 export const NavBar = () => {
+  const [selectedProduct, setSelectedProduct] = useState("product");
   const categoryOptions = [
-    { key: "1", label: "CodeBuddy", href: "#/action-1" },
-    { key: "2", label: "Intellisearch", href: "#/action-2" },
-    { key: "3", label: "Reataurant", href: "#/action-3" },
+    { key: "1", label: "CodeBuddy" },
+    { key: "2", label: "Intellisearch" },
+    { key: "3", label: "Reataurant" },
   ];
 
   const handleCategorySelect = (selectedOption: { key: string; label: string; href?: string }) => {
-    console.log("Selected category:", selectedOption.label);
-    // Handle the selection here
+    setSelectedProduct(selectedOption.label);
   };
   const handleSearch = (searchTerm: string) => {
     console.log("Searching for", searchTerm);
@@ -30,18 +31,13 @@ export const NavBar = () => {
             className="mb-1"
             options={categoryOptions}
             onSelect={handleCategorySelect}
-            toggleText="Products"
+            toggleText={selectedProduct}
             variant="transparent"
           />
           <Nav.Link href="#action1">
             Github <Github />
           </Nav.Link>
-          <SearchForm
-            onSearch={handleSearch}
-            buttonText="Find"
-            placeholder="Enter search term..."
-            buttonVariant="primary"
-          />
+          <SearchForm onSearch={handleSearch} placeholder="Enter search term..." />
         </Navbar.Collapse>
       </Container>
     </Navbar>

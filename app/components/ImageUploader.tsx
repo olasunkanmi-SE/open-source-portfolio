@@ -14,10 +14,11 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onUploadSuccess, onUpload
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
+    const fileUrl = URL.createObjectURL(file);
+    console.log(fileUrl);
     setIsUploading(true);
     try {
-      onUploadSuccess("");
+      onUploadSuccess(fileUrl);
     } catch (error) {
       onUploadError(error as Error);
     } finally {

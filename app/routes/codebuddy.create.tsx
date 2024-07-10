@@ -16,16 +16,17 @@ const formWrapperStyle = {
 const PostCreationForm = () => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Select Category");
 
+  // Todo this list should come from post category from DB
   const categoryOptions = [
-    { key: "1", label: "Chat", href: "#/action-1" },
-    { key: "2", label: "StandAlone", href: "#/action-2" },
-    { key: "3", label: "Others", href: "#/action-3" },
+    { key: "1", label: "Chat" },
+    { key: "2", label: "StandAlone" },
+    { key: "3", label: "Others" },
   ];
 
   const handleCategorySelect = (selectedOption: { key: string; label: string; href?: string }) => {
-    console.log("Selected category:", selectedOption.label);
-    // Handle the selection here
+    setSelectedCategory(selectedOption.label);
   };
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
@@ -35,6 +36,7 @@ const PostCreationForm = () => {
     console.log("Image uploaded successfully:", url);
   };
 
+  //Todo check error handling in Remix
   const handleUploadError = (error: Error) => {
     console.error("Image upload failed:", error);
   };
@@ -52,7 +54,7 @@ const PostCreationForm = () => {
         </Nav>
 
         <Form>
-          <CustomDropdown options={categoryOptions} onSelect={handleCategorySelect} toggleText="Select post Category" />
+          <CustomDropdown options={categoryOptions} onSelect={handleCategorySelect} toggleText={selectedCategory} />
           <Form.Group className="mb-3" controlId="postTitle">
             <Form.Control
               type="text"
@@ -92,7 +94,7 @@ const PostCreationForm = () => {
               <ImageUploader onUploadSuccess={handleUploadSuccess} onUploadError={handleUploadError} />
               {uploadedImageUrl && (
                 <div>
-                  <h3>Uploaded Image:</h3>
+                  <p>Uploaded Image:</p>
                   <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: "300px" }} />
                 </div>
               )}
