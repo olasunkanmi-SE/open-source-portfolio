@@ -16,6 +16,7 @@
     "@remix-run/serve": "^2.10.2",
     "bootstrap": "^5.3.3",
     "isbot": "^4.1.0",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.402.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.4",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@remix-run/dev": "^2.10.2",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
