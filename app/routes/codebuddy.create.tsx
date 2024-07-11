@@ -1,21 +1,13 @@
+import { ActionFunctionArgs } from "@remix-run/node";
+import { Form } from "@remix-run/react";
 import { Check } from "lucide-react";
 import { useState } from "react";
-import { Button, Container, Form, Nav } from "react-bootstrap";
-import CustomDropdown from "~/components/DropDown";
-import ImageUploader from "~/components/ImageUploader";
+import { Container, Nav } from "react-bootstrap";
 
-const formWrapperStyle = {
-  border: "1px solid #e0e0e0",
-  borderRadius: "8px",
-  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-  backgroundColor: "#ffffff",
-  padding: "20px",
-  marginTop: "20px",
-};
-
-const PostCreationForm = () => {
+export default function PostCreationForm() {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
 
   const categoryOptions = [
     { key: "1", label: "Chat", href: "#/action-1" },
@@ -23,86 +15,114 @@ const PostCreationForm = () => {
     { key: "3", label: "Others", href: "#/action-3" },
   ];
 
-  const handleCategorySelect = (selectedOption: { key: string; label: string; href?: string }) => {
-    console.log("Selected category:", selectedOption.label);
-    // Handle the selection here
+  const handleCategorySelect = (key: string) => {
+    return key;
   };
 
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-
-  const handleUploadSuccess = (url: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUploadSuccess = (event: any) => {
+    const file = event.target.files?.[0];
+    const url = URL.createObjectURL(file);
     setUploadedImageUrl(url);
-    console.log("Image uploaded successfully:", url);
-  };
-
-  const handleUploadError = (error: Error) => {
-    console.error("Image upload failed:", error);
+    if (!file) return;
+    console.log(file);
   };
 
   return (
     <Container className="mt-3">
-      <div style={formWrapperStyle}>
+      <div className="formWrapperStyle">
         <Nav variant="tabs" defaultActiveKey="new-post" className="mb-3">
           <Nav.Item>
             <Nav.Link eventKey="new-post">New post</Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="share-link">Share a link</Nav.Link>
-          </Nav.Item>
         </Nav>
 
-        <Form>
-          <CustomDropdown options={categoryOptions} onSelect={handleCategorySelect} toggleText="Select post Category" />
-          <Form.Group className="mb-3" controlId="postTitle">
-            <Form.Control
+        <Form method="post" className="needs-validation" noValidate>
+          <div className="mb-3 styled-dropdown">
+            <select
+              name="category"
+              className="form-select"
+              onChange={(e) => handleCategorySelect(e.target.value)}
+            >
+              <option>Select post Category</option>
+              {categoryOptions.map((option) => (
+                <option key={option.key} value={option.label}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <input
+              name="title"
               type="text"
+              className="form-control"
+              id="postTitle"
               placeholder="Post Title*"
               value={postTitle}
               onChange={(e) => setPostTitle(e.target.value)}
+              required
             />
-            <Form.Text className="text-muted float-end">{postTitle.length}/250</Form.Text>
-          </Form.Group>
+            <div className="form-text text-end">{postTitle.length}/250</div>
+          </div>
 
-          <Nav variant="tabs" className="mb-3">
-            <Nav.Item>
-              <Nav.Link eventKey="write">Write</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="preview">Preview</Nav.Link>
-            </Nav.Item>
-            <Nav.Item className="ms-auto">
-              <Nav.Link disabled>
+          <ul className="nav nav-tabs mb-3">
+            <li className="nav-item">
+              <a className="nav-link active" href="#write">
+                Be creative.
+              </a>
+            </li>
+            <li className="nav-item ms-auto">
+              <a className="nav-link disabled" href="#saved">
                 <Check size={18} className="me-1" /> Saved
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
+              </a>
+            </li>
+          </ul>
 
-          <Form.Group className="mb-3" controlId="postContent">
-            <Form.Control
-              as="textarea"
+          <div className="mb-3">
+            <textarea
+              name="content"
+              className="form-control"
+              id="postContent"
               rows={3}
               placeholder="Share your thoughts"
               value={postContent}
               onChange={(e) => setPostContent(e.target.value)}
-            />
-          </Form.Group>
+            ></textarea>
+          </div>
 
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <ImageUploader onUploadSuccess={handleUploadSuccess} onUploadError={handleUploadError} />
+              <input
+                name="file"
+                type="file"
+                className="form-control"
+                onChange={handleUploadSuccess}
+              />
               {uploadedImageUrl && (
                 <div>
                   <h3>Uploaded Image:</h3>
-                  <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: "300px" }} />
+                  <img
+                    src={uploadedImageUrl}
+                    alt="Uploaded"
+                    style={{ maxWidth: "300px" }}
+                  />
                 </div>
               )}
             </div>
-            <Button variant="dark">Post</Button>
+            <button type="submit" className="btn btn-dark">
+              Post
+            </button>
           </div>
         </Form>
       </div>
     </Container>
   );
-};
+}
 
-export default PostCreationForm;
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  console.log(formData);
+  return formData;
+}
