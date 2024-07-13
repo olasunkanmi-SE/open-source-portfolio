@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Container, Nav } from "react-bootstrap";
 import { ValidationMessage } from "~/components/FormError";
+import SearchComponent from "~/components/Search";
 import { IPost } from "~/models/models";
 import { validatePost } from "~/utils/utils";
 
@@ -50,12 +51,7 @@ export default function PostCreationForm() {
           </Nav.Item>
         </Nav>
 
-        <Form
-          method="post"
-          className="needs-validation"
-          encType="multipart/form-data"
-          noValidate
-        >
+        <Form method="post" className="needs-validation" encType="multipart/form-data" noValidate>
           <fieldset disabled={navigation.state === "submitting"}>
             <div className="mb-3 styled-dropdown">
               <select
@@ -95,10 +91,7 @@ export default function PostCreationForm() {
                 }}
               />
               {actionData?.errors.title ? (
-                <ValidationMessage
-                  error={actionData?.errors?.title}
-                  isSubmitting={navigation.state === "submitting"}
-                />
+                <ValidationMessage error={actionData?.errors?.title} isSubmitting={navigation.state === "submitting"} />
               ) : null}
               <div className="form-text text-end">{postTitle.length}/250</div>
             </div>
@@ -150,11 +143,7 @@ export default function PostCreationForm() {
                 {uploadedImageUrl && (
                   <div>
                     <h3>Uploaded Image:</h3>
-                    <img
-                      src={uploadedImageUrl}
-                      alt="Uploaded"
-                      style={{ maxWidth: "300px" }}
-                    />
+                    <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: "300px" }} />
                   </div>
                 )}
               </div>
@@ -165,6 +154,7 @@ export default function PostCreationForm() {
           </fieldset>
         </Form>
       </div>
+      <SearchComponent />
     </Container>
   );
 }
