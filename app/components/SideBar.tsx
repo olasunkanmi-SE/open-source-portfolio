@@ -47,7 +47,7 @@ const Sidebar: React.FC = () => {
   return (
     <div className="sidebar ">
       <Nav className="flex-column w-100">
-        <SidebarItem label="CODEBUDDY" />
+        <SidebarItem label="Why Code Buddy" />
         <SidebarItem label="Feature Guide" />
         <SidebarItem label="Overview" />
         <SidebarItem label="Chat">
