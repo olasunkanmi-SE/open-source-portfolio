@@ -50,12 +50,7 @@ export default function PostCreationForm() {
           </Nav.Item>
         </Nav>
 
-        <Form
-          method="post"
-          className="needs-validation"
-          encType="multipart/form-data"
-          noValidate
-        >
+        <Form method="post" className="needs-validation" encType="multipart/form-data" noValidate>
           <fieldset disabled={navigation.state === "submitting"}>
             <div className="mb-3 styled-dropdown">
               <select
@@ -87,7 +82,7 @@ export default function PostCreationForm() {
                 type="text"
                 className="form-control"
                 id="postTitle"
-                placeholder="Post Title*"
+                placeholder="Post Title *"
                 value={postTitle}
                 onChange={(e) => setPostTitle(e.target.value)}
                 style={{
@@ -95,10 +90,7 @@ export default function PostCreationForm() {
                 }}
               />
               {actionData?.errors.title ? (
-                <ValidationMessage
-                  error={actionData?.errors?.title}
-                  isSubmitting={navigation.state === "submitting"}
-                />
+                <ValidationMessage error={actionData?.errors?.title} isSubmitting={navigation.state === "submitting"} />
               ) : null}
               <div className="form-text text-end">{postTitle.length}/250</div>
             </div>
@@ -150,11 +142,7 @@ export default function PostCreationForm() {
                 {uploadedImageUrl && (
                   <div>
                     <h3>Uploaded Image:</h3>
-                    <img
-                      src={uploadedImageUrl}
-                      alt="Uploaded"
-                      style={{ maxWidth: "300px" }}
-                    />
+                    <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: "300px" }} />
                   </div>
                 )}
               </div>

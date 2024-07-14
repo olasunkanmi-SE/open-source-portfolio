@@ -16,12 +16,9 @@ export default function CodeBuddy() {
             <Outlet />
           </Col>
           <Col lg={2} className="d-none d-lg-block mb-4 col-top">
-            <div className="p-3  h-100 col-right">
+            <div className="p-3  h-100 col-right far-right">
               <h2>Column 3</h2>
-              <p>
-                This is the content for the third column. It will be hidden on
-                smaller screens.
-              </p>
+              <p>This is the content for the third column. It will be hidden on smaller screens.</p>
             </div>
           </Col>
         </Row>
