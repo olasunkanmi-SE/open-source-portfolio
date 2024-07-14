@@ -4,7 +4,6 @@ import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Container, Nav } from "react-bootstrap";
 import { ValidationMessage } from "~/components/FormError";
-import SearchComponent from "~/components/Search";
 import { IPost } from "~/models/models";
 import { validatePost } from "~/utils/utils";
 
@@ -83,7 +82,7 @@ export default function PostCreationForm() {
                 type="text"
                 className="form-control"
                 id="postTitle"
-                placeholder="Post Title*"
+                placeholder="Post Title *"
                 value={postTitle}
                 onChange={(e) => setPostTitle(e.target.value)}
                 style={{
@@ -154,7 +153,6 @@ export default function PostCreationForm() {
           </fieldset>
         </Form>
       </div>
-      <SearchComponent />
     </Container>
   );
 }

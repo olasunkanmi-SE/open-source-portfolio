@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Form, useNavigate, useSearchParams } from "@remix-run/react";
-import { Search, X } from "lucide-react";
+import { Search } from "lucide-react";
 import debounce from "lodash.debounce";
 
 interface SearchResult {
@@ -15,18 +15,19 @@ interface GroupedResult {
   items: SearchResult[];
 }
 
-// This would typically come from your backend or a larger dataset
 const allResults: SearchResult[] = [
   {
     id: "1",
     title: "CI/CD Integration",
-    description: "Integrate Codiumate with your CI/CD pipeline",
+    description:
+      "A free text field where you can specify general instructions that apply to the entire test suite. Use this space to request specific styling, documentation inclusion, or any other overarching guidelines you'd like Codiumate to follow during test generation.",
     page: "Configuration",
   },
   {
     id: "2",
     title: "Pipeline Configuration",
-    description: "Set up your CI/CD pipeline with Codiumate",
+    description:
+      "Effective test generation in Codiumate relies heavily on understanding the context of your project. When initiating test generation, Codiumate meticulously collects context based on your code's dependencies and interactions. This rich context is crucial for generating accurate and meaningful tests that closely align with your project's specific requirements.",
     page: "Configuration",
   },
   {
@@ -35,66 +36,58 @@ const allResults: SearchResult[] = [
     description: "Use Codiumate in your automated deployment process",
     page: "Deployment",
   },
-  // Add more items as needed
 ];
 
-export default function SearchComponent() {
+interface ISearchComponent {
+  readonly show: boolean;
+}
+export default function SearchComponent({ show }: ISearchComponent) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [groupedResults, setGroupedResults] = useState<GroupedResult[]>([]);
   const [showResults, setShowResults] = useState(false);
 
-  const filterAndGroupResults = useCallback(
-    (searchQuery: string) => {
-      if (!searchQuery) {
-        setGroupedResults([]);
-        setShowResults(false);
-        return;
+  const filterAndGroupResults = useCallback((searchQuery: string) => {
+    if (!searchQuery) {
+      setGroupedResults([]);
+      setShowResults(false);
+      return;
+    }
+
+    const filteredResults = allResults.filter(
+      (result) =>
+        result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        result.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const grouped = filteredResults.reduce((acc, result) => {
+      const existingGroup = acc.find((group) => group.page === result.page);
+      if (existingGroup) {
+        existingGroup.items.push(result);
+      } else {
+        acc.push({ page: result.page, items: [result] });
       }
+      return acc;
+    }, [] as GroupedResult[]);
 
-      const filteredResults = allResults.filter(
-        (result) =>
-          result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          result.description.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    setGroupedResults(grouped);
+    setShowResults(true);
+  }, []);
 
-      const grouped = filteredResults.reduce((acc, result) => {
-        const existingGroup = acc.find((group) => group.page === result.page);
-        if (existingGroup) {
-          existingGroup.items.push(result);
-        } else {
-          acc.push({ page: result.page, items: [result] });
-        }
-        return acc;
-      }, [] as GroupedResult[]);
-
-      setGroupedResults(grouped);
-      setShowResults(true);
-      //Pass the mutation value here in the future, read on useCallBack, I think we should use some other hooks if we are actually making api calls
-    },
-    []
-    // [allResults]
-  );
-
-  // Debounce the filter function to avoid excessive filtering on every keystroke
   const debouncedFilter = useCallback(debounce(filterAndGroupResults, 300), [filterAndGroupResults]);
 
   useEffect(() => {
     debouncedFilter(query);
-    // Update the URL with the current query
-    navigate(`?q=${encodeURIComponent(query)}`, { replace: true });
-  }, [query, debouncedFilter, navigate]);
+    if (!show) {
+      setQuery("");
+      setGroupedResults([]);
+      setShowResults(false);
+    }
+  }, [query, debouncedFilter, navigate, show]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-  };
-
-  const clearSearch = () => {
-    setQuery("");
-    setGroupedResults([]);
-    setShowResults(false);
-    navigate("/");
   };
 
   return (
@@ -111,17 +104,12 @@ export default function SearchComponent() {
             onChange={handleInputChange}
             aria-label="Search"
           />
-          {query && (
-            <button type="button" className="clear-button" onClick={clearSearch}>
-              <X size={18} />
-            </button>
-          )}
         </div>
       </Form>
       {showResults && (
         <div className="search-results">
           {groupedResults.map((group, index) => (
-            <div key={index} className="search-result-group">
+            <div key={index + Math.max(Math.random())} className="search-result-group">
               {group.items.map((result, itemIndex) => (
                 <div key={result.id} className="search-result-item">
                   <h5>{result.title}</h5>
@@ -135,87 +123,6 @@ export default function SearchComponent() {
           ))}
         </div>
       )}
-      <style>{`
-        .search-container {
-          position: relative;
-          width: 100%;
-          max-width: 600px;
-          margin: 0 auto;
-          color:#000
-        }
-        .search-form {
-          margin-bottom: 0;
-        }
-        .search-input-wrapper {
-          position: relative;
-          display: flex;
-          align-items: center;
-          background-color: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-        }
-        .search-icon {
-          position: absolute;
-          left: 10px;
-          color: #888;
-        }
-        .search-input {
-          width: 100%;
-          padding: 10px 10px 10px 40px;
-          border: var(--bs-border-width) solid var(--bs-border-color);
-          border-radius: var(--bs-border-radius);
-          background-color: transparent;
-          color: #000;
-          font-size: 16px;
-        }
-        .search-input::placeholder {
-          color: #888;
-        }
-        .search-input:focus {
-          outline: none;
-        }
-        .clear-button {
-          background: none;
-          border: none;
-          color: #888;
-          cursor: pointer;
-          padding: 0 10px;
-        }
-        .search-results {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
-          background-color: transparent;
-          z-index: 1000;
-          max-height: 400px;
-          overflow-y: auto;
-          margin-top: 5px;
-          border: var(--bs-border-width) solid var(--bs-border-color);
-          border-radius: var(--bs-border-radius);
-          box-shadow: 0 1px 2px 0 rgba(0,0,0,.1)
-        }
-        .search-result-group {
-          margin-bottom: 10px;
-          margin-left: 10px;
-        }
-        .search-result-item {
-          padding: 5px 0;
-        }
-        .search-result-item h5 {
-          margin: 0;
-          color: #7476f8;
-          font-size: 16px;
-        }
-        .search-result-item .subtitle {
-          color: #888;
-          font-size: 14px;
-          margin-top: 2px;
-        }
-        .search-result-item p {
-          margin: 5px 0 0;
-          font-size: 14px;
-        }
-      `}</style>
     </div>
   );
 }

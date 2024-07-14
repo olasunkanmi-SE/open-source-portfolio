@@ -3,12 +3,11 @@ import { Form } from "react-bootstrap";
 
 interface SearchFormProps {
   onSearch: (searchTerm: string) => void;
-  buttonText?: string;
   placeholder?: string;
-  buttonVariant?: string;
+  onClick: () => void;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ onSearch, placeholder = "Search" }) => {
+const SearchForm: React.FC<SearchFormProps> = ({ onSearch, placeholder = "Search", onClick }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,6 +24,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, placeholder = "Search
         aria-label="Search"
         value={searchTerm}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+        onClick={onClick}
       />
     </Form>
   );
