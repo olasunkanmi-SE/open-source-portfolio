@@ -1,7 +1,8 @@
 # Open Source Projects Documentation
 
 - This space is my portfolio and my open-source project documentation.
-- These solutions are developed to ease developers day to day activities. Some of these solutions are based on my day-to-day needs as a developer
+-  These solutions are based on my day-to-day needs as a developer
+- These solutions are developed to ease developers day to day activities.
 ## Featured Projects
 
 CodeBuddy - AI-Powered Coding Assistant
