@@ -9,7 +9,7 @@
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
-    "migrate": "npx prisma migrate dev --name init"
+    "generate:migration": "printf 'Enter migration name: ' && read migrationName && prisma migrate dev --name $migrationName && npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
