@@ -1,3 +1,4 @@
+import * as crypto from "crypto";
 import { IPost } from "~/models/models";
 
 const DEFAULT_REDIRECT = "/";
@@ -49,4 +50,16 @@ export function safeRedirect(
 
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
+}
+
+export function hashPassword(password: string): string {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha256").toString("hex");
+  return `${salt}:${hash}`;
+}
+
+export function verifyPassword(inputPassword: string, storedHash: string): boolean {
+  const [salt, hash] = storedHash.split(":");
+  const inputHash = crypto.pbkdf2Sync(inputPassword, salt, 1000, 64, "sha256").toString("hex");
+  return inputHash === hash;
 }
