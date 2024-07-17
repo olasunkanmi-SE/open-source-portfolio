@@ -326,3 +326,15 @@ body {
     font-size: 14px;
     color: #ccc;
 }
+
+.formTopMargin {
+    margin-top: 10rem !important
+}
+
+.centeredForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
