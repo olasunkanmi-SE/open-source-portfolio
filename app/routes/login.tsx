@@ -1,18 +1,21 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Outlet, useActionData, useSearchParams } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import { Form, useActionData, useNavigation, useSearchParams } from "@remix-run/react";
+import { useEffect, useRef, useState } from "react";
+import { Button, Container, Stack } from "react-bootstrap";
+import { ValidationMessage } from "~/components/FormError";
+import { NavBar } from "~/components/NavBar";
 import { SessionManager } from "~/session.server";
 import { safeRedirect, validateEmail } from "~/utils/utils";
 
 const sessionManager = new SessionManager();
 
-// export const loader = async ({ request }: LoaderFunctionArgs) => {
-//   const userId = await sessionManager.getUserId(request);
-//   console.log({ userId });
-//   if (userId) return redirect("/");
-//   return json({});
-// };
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const userId = await sessionManager.getUserId(request);
+  console.log({ userId });
+  if (!userId) return redirect("/");
+  return json({});
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -50,8 +53,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export const meta: MetaFunction = () => [{ title: "Login" }];
 
 export default function LoginPage() {
+  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? "/codebuddy/create";
+  const redirectTo = searchParams.get("redirectTo") ?? "/codebuddy/chat";
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -65,79 +71,62 @@ export default function LoginPage() {
   }, [actionData]);
 
   return (
-    <div className="flex min-h-full flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
-        <Form method="post" className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email address
-            </label>
-            <div className="mt-1">
-              <input
-                ref={emailRef}
-                id="email"
-                required
-                name="email"
-                type="email"
-                autoComplete="email"
-                aria-invalid={actionData?.errors?.email ? true : undefined}
-                aria-describedby="email-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-              />
-              {actionData?.errors?.email ? (
-                <div className="pt-1 text-red-700" id="email-error">
-                  {actionData.errors.email}
+    <div>
+      <NavBar />
+      <div className="centeredForm">
+        <Container fluid className="flex-grow-1">
+          <Stack gap={1} className="col-md-4 mx-auto">
+            <Form method="post" className="needs-validation" encType="multipart/form-data" noValidate>
+              <fieldset disabled={navigation.state === "submitting"}>
+                <div className="mb-3">
+                  <input
+                    name="email"
+                    type="text"
+                    className="form-control"
+                    id="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{
+                      borderColor: actionData?.errors?.email ? "red" : "",
+                    }}
+                  />
+                  {actionData?.errors.email ? (
+                    <ValidationMessage
+                      error={actionData?.errors?.email}
+                      isSubmitting={navigation.state === "submitting"}
+                    />
+                  ) : null}
                 </div>
-              ) : null}
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <div className="mt-1">
-              <input
-                id="password"
-                ref={passwordRef}
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                aria-invalid={actionData?.errors?.password ? true : undefined}
-                aria-describedby="password-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-              />
-              {actionData?.errors?.password ? (
-                <div className="pt-1 text-red-700" id="password-error">
-                  {actionData.errors.password}
+                <div className="mb-3">
+                  <input
+                    name="password"
+                    type="text"
+                    className="form-control"
+                    id="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={{
+                      borderColor: actionData?.errors?.password ? "red" : "",
+                    }}
+                  />
+                  {actionData?.errors.password ? (
+                    <ValidationMessage
+                      error={actionData?.errors?.password}
+                      isSubmitting={navigation.state === "submitting"}
+                    />
+                  ) : null}
                 </div>
-              ) : null}
-            </div>
-          </div>
-
-          <input type="hidden" name="redirectTo" value={redirectTo} />
-          <button
-            type="submit"
-            className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
-          >
-            Log in
-          </button>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember"
-                name="remember"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">
-                Remember me
-              </label>
-            </div>
-          </div>
-        </Form>
+                <input type="hidden" name="redirectTo" value={redirectTo} />
+                <Button type="submit" variant="dark">
+                  Submit
+                </Button>
+              </fieldset>
+            </Form>
+          </Stack>
+        </Container>
       </div>
-      <Outlet />
     </div>
   );
 }

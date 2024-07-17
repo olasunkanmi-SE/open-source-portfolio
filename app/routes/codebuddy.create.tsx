@@ -42,8 +42,8 @@ export default function PostCreationForm() {
   }, [uploadedImageUrl]);
 
   return (
-    <Container className="mt-3">
-      <div className="formWrapperStyle">
+    <Container className="formTopMargin">
+      <div>
         <Nav variant="tabs" defaultActiveKey="new-post" className="mb-3">
           <Nav.Item>
             <Nav.Link eventKey="new-post">New post</Nav.Link>
