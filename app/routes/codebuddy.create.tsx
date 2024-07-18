@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Container, Nav } from "react-bootstrap";
 import { ValidationMessage } from "~/components/FormError";
+import { MarkDownPreview } from "~/components/MarkDownPreview";
 import { IPost } from "~/models/models";
 import { validatePost } from "~/utils/utils";
 
@@ -40,6 +41,8 @@ export default function PostCreationForm() {
       }
     };
   }, [uploadedImageUrl]);
+
+  const [activeTab, setActiveTab] = useState("write");
 
   return (
     <Container className="formTopMargin">
@@ -97,8 +100,21 @@ export default function PostCreationForm() {
 
             <ul className="nav nav-tabs mb-3">
               <li className="nav-item">
-                <a className="nav-link active" href="#write">
+                <a
+                  className={`nav-link ${activeTab === "write" ? "active" : ""}`}
+                  href="#write"
+                  onClick={() => setActiveTab("write")}
+                >
                   Be creative.
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className={`nav-link ${activeTab === "preview" ? "active" : ""}`}
+                  href="#preview"
+                  onClick={() => setActiveTab("preview")}
+                >
+                  Preview
                 </a>
               </li>
               <li className="nav-item ms-auto">
@@ -108,27 +124,32 @@ export default function PostCreationForm() {
               </li>
             </ul>
 
-            <div className="mb-3">
-              <textarea
-                name="content"
-                className="form-control"
-                id="postContent"
-                rows={3}
-                placeholder="Share your thoughts"
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
-                style={{
-                  borderColor: actionData?.errors?.content ? "red" : "",
-                }}
-              ></textarea>
-
-              {actionData?.errors.content ? (
-                <ValidationMessage
-                  error={actionData?.errors?.content}
-                  isSubmitting={navigation.state === "submitting"}
-                />
-              ) : null}
-            </div>
+            {activeTab === "write" ? (
+              <div className="mb-3">
+                <textarea
+                  name="content"
+                  className="form-control"
+                  id="postContent"
+                  rows={3}
+                  placeholder="Share your thoughts"
+                  value={postContent}
+                  onChange={(e) => setPostContent(e.target.value)}
+                  style={{
+                    borderColor: actionData?.errors?.content ? "red" : "",
+                  }}
+                ></textarea>
+                {actionData?.errors.content ? (
+                  <ValidationMessage
+                    error={actionData?.errors?.content}
+                    isSubmitting={navigation.state === "submitting"}
+                  />
+                ) : null}
+              </div>
+            ) : (
+              <div className="mb-3">
+                <MarkDownPreview markdown={postContent} />
+              </div>
+            )}
 
             <div className="d-flex justify-content-between align-items-center">
               <div>
