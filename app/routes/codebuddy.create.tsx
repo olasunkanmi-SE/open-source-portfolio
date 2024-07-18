@@ -180,16 +180,26 @@ export default function PostCreationForm() {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const post: IPost = {
+  const post = extractPostData(formData);
+  const validationErrors = validatePost(post);
+
+  if (hasErrors(validationErrors)) {
+    console.log(validationErrors);
+    return { errors: validationErrors };
+  }
+
+  return redirect("/");
+}
+
+function extractPostData(formData: FormData): IPost {
+  return {
     category: formData.get("category") as string,
     title: formData.get("title") as string,
     content: formData.get("content") as string,
     file: formData.get("file") as string,
   };
-  const errors: { [key: string]: string } = validatePost(post);
-  if (Object.values(errors).some((err) => err.length > 1)) {
-    console.log(errors);
-    return { errors };
-  }
-  return redirect("/");
+}
+
+function hasErrors(errors: { [key: string]: string }): boolean {
+  return Object.values(errors).some((err) => err.length > 1);
 }
