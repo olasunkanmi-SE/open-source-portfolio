@@ -4,9 +4,12 @@ class CloudinaryService {
   constructor() {
     cloudinary.config({
       secure: true,
+      cloud_name: process.env.CLOUDINARY_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_SECRET,
     });
   }
-  async uploadImage(imagePath: string): Promise<string | undefined> {
+  private async uploadImage(imagePath: string): Promise<UploadApiResponse | undefined> {
     const options: UploadApiOptions = {
       use_filename: true,
       unique_filename: false,
@@ -15,8 +18,7 @@ class CloudinaryService {
 
     try {
       const result: UploadApiResponse = await cloudinary.uploader.upload(imagePath, options);
-      console.log(result);
-      return result.public_id;
+      return result;
     } catch (error) {
       console.error(error);
     }
@@ -54,21 +56,22 @@ class CloudinaryService {
   async main() {
     const imagePath = "https://cloudinary-devs.github.io/cld-docs-assets/assets/images/happy_people.jpg";
 
-    const publicId = await this.uploadImage(imagePath);
-
-    if (!publicId) {
+    const response = await this.uploadImage(imagePath);
+    console.log(response);
+    if (!response) {
       console.error("Failed to upload image.");
       return;
     }
 
-    const colors = await this.getAssetInfo(publicId);
+    const colors = await this.getAssetInfo(response.public_id);
+    console.log(colors);
 
     if (!colors) {
       console.error("Failed to get asset info.");
       return;
     }
 
-    const imageTag = this.createImageTag(publicId, colors[0][0], colors[1][0]);
+    const imageTag = this.createImageTag(response.publicId, colors[0][0], colors[1][0]);
 
     console.log(imageTag);
   }
