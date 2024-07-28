@@ -13,6 +13,11 @@ export const validatePost = (post: IPost) => {
           error[key] = "Select a category";
         }
         break;
+      case "published":
+        if (value === "Select post type") {
+          error[key] = "Select a post type";
+        }
+        break;
       case "title":
         if (!value.length) {
           error[key] = "Enter the post title";

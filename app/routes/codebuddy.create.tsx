@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { Container, Nav } from "react-bootstrap";
 import { ValidationMessage } from "~/components/FormError";
 import { MarkDownPreview } from "~/components/MarkDownPreview";
+import { SelectItem } from "~/components/Select";
 import { IPost } from "~/models/models";
+import { createPost } from "~/repository/post.repository";
 import { validatePost } from "~/utils/utils";
 
 export default function PostCreationForm() {
@@ -16,9 +18,14 @@ export default function PostCreationForm() {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
 
   const categoryOptions = [
-    { key: "1", label: "Chat", href: "#/action-1" },
-    { key: "2", label: "StandAlone", href: "#/action-2" },
-    { key: "3", label: "Others", href: "#/action-3" },
+    { key: "1", label: "Chat" },
+    { key: "2", label: "StandAlone" },
+    { key: "3", label: "Others" },
+  ];
+
+  const postType = [
+    { key: "1", label: "Post" },
+    { key: "2", label: "Draft" },
   ];
 
   const handleCategorySelect = (key: string) => {
@@ -56,21 +63,13 @@ export default function PostCreationForm() {
         <Form method="post" className="needs-validation" encType="multipart/form-data" noValidate>
           <fieldset disabled={navigation.state === "submitting"}>
             <div className="mb-3 styled-dropdown">
-              <select
+              <SelectItem
                 name="category"
-                className="form-select"
-                onChange={(e) => handleCategorySelect(e.target.value)}
-                style={{
-                  borderColor: actionData?.errors?.category ? "red" : "",
-                }}
-              >
-                <option>Select post category</option>
-                {categoryOptions.map((option) => (
-                  <option key={option.key} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+                options={categoryOptions}
+                onChange={handleCategorySelect}
+                title="Select post category"
+                error={actionData?.errors?.category}
+              />
               {actionData?.errors.category ? (
                 <ValidationMessage
                   error={actionData?.errors?.category}
@@ -151,6 +150,22 @@ export default function PostCreationForm() {
               </div>
             )}
 
+            <div className="mb-3 styled-dropdown">
+              <SelectItem
+                name="published"
+                options={postType}
+                onChange={handleCategorySelect}
+                title="Select post type"
+                error={actionData?.errors?.published}
+              />
+              {actionData?.errors.published ? (
+                <ValidationMessage
+                  error={actionData?.errors?.published}
+                  isSubmitting={navigation.state === "submitting"}
+                />
+              ) : null}
+            </div>
+
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <input
@@ -179,17 +194,33 @@ export default function PostCreationForm() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const post: IPost = {
+  try {
+    const formData = await request.formData();
+    const post = extractPostData(formData);
+    const validationErrors = validatePost(post);
+
+    if (hasErrors(validationErrors)) {
+      console.log(validationErrors);
+      return { errors: validationErrors };
+    }
+    createPost(post);
+    return redirect("/");
+  } catch (error) {
+    console.error("Error creating post:", error);
+    return { errors: { message: "Failed to create post" } };
+  }
+}
+
+function extractPostData(formData: FormData): IPost {
+  return {
     category: formData.get("category") as string,
     title: formData.get("title") as string,
     content: formData.get("content") as string,
     file: formData.get("file") as string,
+    published: formData.get("published") as string,
   };
-  const errors: { [key: string]: string } = validatePost(post);
-  if (Object.values(errors).some((err) => err.length > 1)) {
-    console.log(errors);
-    return { errors };
-  }
-  return redirect("/");
+}
+
+function hasErrors(errors: { [key: string]: string }): boolean {
+  return Object.values(errors).some((err) => err.length > 1);
 }
