@@ -7,9 +7,11 @@ import { ValidationMessage } from "~/components/FormError";
 import { MarkDownPreview } from "~/components/MarkDownPreview";
 import { SelectItem } from "~/components/Select";
 import { IPost } from "~/models/models";
-import { createPost } from "~/repository/post.repository";
-import { SessionManager } from "~/session.server";
 import { validatePost } from "~/utils/utils";
+import { sessionManager } from "./login";
+import { PostService } from "~/repository/post.repository";
+
+const postService = new PostService();
 
 const sessionManager: SessionManager = new SessionManager();
 
@@ -209,7 +211,7 @@ export async function action({ request }: ActionFunctionArgs) {
     if (hasErrors(validationErrors)) {
       return { errors: validationErrors };
     }
-    await createPost({ ...post, userId });
+    await postService.createPost({ ...post, userId });
     return redirect("/");
   } catch (error) {
     console.error("Error creating post:", error);
