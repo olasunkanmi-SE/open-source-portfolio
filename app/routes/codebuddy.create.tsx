@@ -13,6 +13,8 @@ import { PostService } from "~/repository/post.repository";
 
 const postService = new PostService();
 
+const sessionManager: SessionManager = new SessionManager();
+
 export default function PostCreationForm() {
   const navigation = useNavigation();
   const actionData = useActionData<typeof action>();

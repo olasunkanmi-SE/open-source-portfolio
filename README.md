@@ -1,7 +1,7 @@
 # Open Source Projects Documentation
 
-Welcome to my GitHub repository! This space serves as both my personal portfolio and a showcase for my open-source projects. I'm passionate about creating innovative solutions that enhance user experiences and streamline processes in various domains.
-
+- Open-source project documentation.
+- Most of these solutions are born out of my day-to-day needs as a developer
 ## Featured Projects
 
 CodeBuddy - AI-Powered Coding Assistant
