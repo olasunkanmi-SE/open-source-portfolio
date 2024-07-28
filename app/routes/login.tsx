@@ -11,7 +11,7 @@ import { SessionManager } from "~/session.server";
 import { Index } from "~/utils/memory";
 import { safeRedirect, validateEmail } from "~/utils/utils";
 
-const sessionManager = new SessionManager();
+export const sessionManager = new SessionManager();
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await sessionManager.getUserId(request);
