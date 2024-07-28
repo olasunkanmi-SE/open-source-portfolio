@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useNavigation, useSearchParams } from "@remix-run/react";
@@ -5,19 +6,23 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Container, Stack } from "react-bootstrap";
 import { ValidationMessage } from "~/components/FormError";
 import { NavBar } from "~/components/NavBar";
+import { createUser, verifyLogin } from "~/repository/user.repository";
 import { SessionManager } from "~/session.server";
+import { Index } from "~/utils/memory";
 import { safeRedirect, validateEmail } from "~/utils/utils";
 
 const sessionManager = new SessionManager();
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await sessionManager.getUserId(request);
-  console.log({ userId });
-  if (!userId) return redirect("/");
+  if (userId) return redirect("/codebuddy/create");
   return json({});
 };
 
+const memory = new Index();
+
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const isSignUp = memory.has("join");
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -36,18 +41,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ errors: { email: null, password: "Password is too short" } }, { status: 400 });
   }
 
-  const user = { id: "1" };
+  let user: any;
 
-  if (!user) {
-    return json({ errors: { email: "Invalid email or password", password: null } }, { status: 400 });
+  memory.delete("join");
+
+  if (isSignUp) {
+    user = await createUser(email, password);
+    return redirect(`/login`);
+  } else {
+    user = await verifyLogin(email, password);
+    if (!user) {
+      return json({ errors: { email: "Invalid email or password", password: null } }, { status: 400 });
+    }
+    return sessionManager.createUserSession({
+      redirectTo,
+      remember: remember === "on",
+      request,
+      userId: user.id,
+    });
   }
-
-  return sessionManager.createUserSession({
-    redirectTo,
-    remember: remember === "on",
-    request,
-    userId: user.id,
-  });
 };
 
 export const meta: MetaFunction = () => [{ title: "Login" }];
@@ -57,6 +69,10 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [searchParams] = useSearchParams();
+  const allSearchParameters: string[] = searchParams.getAll("type");
+  if (allSearchParameters.includes("join")) {
+    memory.allocate("join", true);
+  }
   const redirectTo = searchParams.get("redirectTo") ?? "/codebuddy/chat";
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);

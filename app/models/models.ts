@@ -4,4 +4,5 @@ export interface IPost {
   title: string;
   file?: string;
   published: string;
+  userId?: string;
 }

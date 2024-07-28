@@ -3,7 +3,7 @@ import { IPost } from "~/models/models";
 
 export async function createPost(post: IPost) {
   try {
-    const { title, category, content, published } = post;
+    const { title, category, content, published, userId } = post;
     const newPost = await prisma.post.create({
       data: {
         title,
@@ -12,7 +12,7 @@ export async function createPost(post: IPost) {
         published: published === "Post" ? true : false,
         author: {
           connect: {
-            id: 123,
+            id: Number(userId),
           },
         },
       },
