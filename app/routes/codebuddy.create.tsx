@@ -8,7 +8,10 @@ import { MarkDownPreview } from "~/components/MarkDownPreview";
 import { SelectItem } from "~/components/Select";
 import { IPost } from "~/models/models";
 import { createPost } from "~/repository/post.repository";
+import { SessionManager } from "~/session.server";
 import { validatePost } from "~/utils/utils";
+
+const sessionManager: SessionManager = new SessionManager();
 
 export default function PostCreationForm() {
   const navigation = useNavigation();
@@ -195,15 +198,18 @@ export default function PostCreationForm() {
 
 export async function action({ request }: ActionFunctionArgs) {
   try {
+    const userId = await sessionManager.requireUserId(request);
+    if (!userId) {
+      return redirect("/");
+    }
     const formData = await request.formData();
     const post = extractPostData(formData);
     const validationErrors = validatePost(post);
 
     if (hasErrors(validationErrors)) {
-      console.log(validationErrors);
       return { errors: validationErrors };
     }
-    createPost(post);
+    await createPost({ ...post, userId });
     return redirect("/");
   } catch (error) {
     console.error("Error creating post:", error);
