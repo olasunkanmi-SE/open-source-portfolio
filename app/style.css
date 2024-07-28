@@ -2,7 +2,7 @@ body {
     height: 100%;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 17px;
 }
 
 .dropdown-item {
@@ -68,6 +68,7 @@ body {
 
 .col-top {
     margin-top: 5rem;
+    z-index: -999;
 }
 
 .col-right {
@@ -203,13 +204,6 @@ body {
     padding: "20px";
 }
 
-.far-right {
-    margin-top: 45px;
-    position: fixed;
-    z-index: -999;
-    overflow-y: auto;
-}
-
 .overlay {
     position: fixed;
     top: 0;
@@ -336,4 +330,9 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+}
+
+.logOut {
+    margin-top: "10px";
+    margin-left: "5px"
 }
