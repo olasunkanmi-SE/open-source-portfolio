@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { Nav } from "react-bootstrap";
@@ -78,11 +78,26 @@ export default function Sidebar({ drafts }: Idraft) {
           <SidebarItem label="Optimize" level={1} />
           <SidebarItem label="Send to Ola" level={1} />
         </SidebarItem>
-        <SidebarItem label="Drafts">
+        <SidebarItem label="Research">
           {drafts.map((draft: IPostDraft) => (
             <SidebarItem key={`draft-${draft.id}`} to={`./drafts/${draft.id}`} label={draft.title} level={1} />
           ))}
         </SidebarItem>
+        <SidebarItem label="Posts">
+          <SidebarItem to="/codebuddy/create" label="Create" level={1} />
+          <SidebarItem to="" label="Delete" level={1} />
+          <SidebarItem to="" label="Update" level={1} />
+        </SidebarItem>
+        <div className="">
+          <Form action="/logout" method="post">
+            <button
+              type="submit"
+              className="rounded bg-slate-600 px-4 py-2 text-blue-100 hover:bg-blue-500 active:bg-blue-600"
+            >
+              Logout
+            </button>
+          </Form>
+        </div>
       </Nav>
     </div>
   );
