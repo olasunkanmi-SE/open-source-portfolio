@@ -19,12 +19,19 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export default function Draft() {
   const data = useLoaderData<typeof loader>();
   return (
-    <div>
-      <p>
-        <div className="mb-3">
-          <MarkDownPreview markdown={data.data.content} />
+    <div className="p-3  h-100">
+      <div className="md-content" data-md-component="content">
+        <div>
+          <div>
+            <h1 id="introduction-to-focus-selection">{data.data.title}</h1>
+          </div>
+          <p>
+            <div className="mb-3">
+              <MarkDownPreview markdown={data.data.content} />
+            </div>
+          </p>
         </div>
-      </p>
+      </div>
     </div>
   );
 }

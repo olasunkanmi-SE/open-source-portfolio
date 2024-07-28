@@ -1,10 +1,11 @@
-import { Github } from "lucide-react";
+import { Github, Settings } from "lucide-react";
+import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import SearchForm from "./SearchForm";
 import { SearchModal } from "./Modal";
-import { useState } from "react";
+import SearchForm from "./SearchForm";
+import { Link } from "@remix-run/react";
 
 export const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -18,12 +19,20 @@ export const NavBar = () => {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll></Nav>
-          <Nav.Link href="#action1">
-            <Github />
-          </Nav.Link>
           <div className={`overlay ${showModal ? "active" : ""}`}></div>
           <SearchForm onSearch={handleShowModal} placeholder="Enter search term..." onClick={handleShowModal} />
           <SearchModal show={showModal} onHide={handleCloseModal} />
+          <Nav.Link>
+            <Link style={{ textDecoration: "none", color: "#000" }} to="/">
+              Blog
+            </Link>
+          </Nav.Link>
+          <Nav.Link href="https://github.com/olasunkanmi-SE/codebuddy" target="_blank">
+            <Github />
+          </Nav.Link>
+          <Nav.Link>
+            <Settings />
+          </Nav.Link>
         </Navbar.Collapse>
       </Container>
     </Navbar>
