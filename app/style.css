@@ -67,7 +67,7 @@ body {
 }
 
 .col-top {
-    margin-top: 10px;
+    margin-top: 5rem;
 }
 
 .col-right {
@@ -201,7 +201,6 @@ body {
     border-radius: "8px";
     box-shadow: "0 2px 10px rgba(0, 0, 0, 0.1)";
     padding: "20px";
-    margin-top: "20px";
 }
 
 .far-right {
@@ -327,9 +326,9 @@ body {
     color: #ccc;
 }
 
-.formTopMargin {
+/* .formTopMargin {
     margin-top: 10rem !important
-}
+} */
 
 .centeredForm {
     display: flex;
