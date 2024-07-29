@@ -24,6 +24,7 @@ export default function PostCreationForm() {
     { key: "1", label: "Chat" },
     { key: "2", label: "StandAlone" },
     { key: "3", label: "Others" },
+    { key: "4", label: "Blog" },
   ];
 
   const postType = [
