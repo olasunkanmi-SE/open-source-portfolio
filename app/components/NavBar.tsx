@@ -1,11 +1,11 @@
-import { Github, Settings } from "lucide-react";
+import { Link } from "@remix-run/react";
+import { Github, LinkedinIcon, Settings } from "lucide-react";
 import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { SearchModal } from "./Modal";
 import SearchForm from "./SearchForm";
-import { Link } from "@remix-run/react";
 
 export const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -27,8 +27,11 @@ export const NavBar = () => {
               Blog
             </Link>
           </Nav.Link>
-          <Nav.Link href="https://github.com/olasunkanmi-SE/codebuddy" target="_blank">
+          <Nav.Link href="https://github.com/olasunkanmi-SE/" target="_blank">
             <Github />
+          </Nav.Link>
+          <Nav.Link href="https://www.linkedin.com/in/oyinlola-olasunkanmi-raymond-71b6b8aa/" target="_blank">
+            <LinkedinIcon />
           </Nav.Link>
           <Nav.Link>
             <Settings />
