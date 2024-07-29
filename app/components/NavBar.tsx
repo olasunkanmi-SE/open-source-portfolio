@@ -27,6 +27,11 @@ export const NavBar = () => {
               Blog
             </Link>
           </Nav.Link>
+          <Nav.Link>
+            <Link style={{ textDecoration: "none", color: "#000" }} to="/resume">
+              Resume
+            </Link>
+          </Nav.Link>
           <Nav.Link href="https://github.com/olasunkanmi-SE/" target="_blank">
             <Github />
           </Nav.Link>
