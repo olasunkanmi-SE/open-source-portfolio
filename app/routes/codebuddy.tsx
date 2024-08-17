@@ -7,7 +7,6 @@ import Sidebar from "~/components/SideBar";
 import { IPostDraft } from "~/models/models";
 import { PostService } from "~/repository/post.repository";
 import { sessionManager } from "./login";
-import Footer from "~/components/Footer";
 
 const postService = new PostService();
 
@@ -32,7 +31,6 @@ export default function CodeBuddy() {
           </Col>
         </Row>
       </Container>
-      <Footer />
     </div>
   );
 }

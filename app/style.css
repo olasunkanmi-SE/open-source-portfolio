@@ -1,6 +1,6 @@
 body {
     height: 100%;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
     font-weight: 300;
     font-size: 17px;
 }
@@ -20,6 +20,7 @@ body {
     border-right: 1px solid #f3f3f3;
     background-color: #fdfdfd;
     margin-top: 10px;
+    font-size: 14px
 }
 
 .sidebar-item {
@@ -133,7 +134,6 @@ body {
 }
 
 .md-typeset .headerlink {
-    font-family: "Font Awesome 5 Free";
     font-weight: 900;
     font-size: 0.8em;
     vertical-align: middle;
@@ -155,7 +155,6 @@ body {
 .styled-dropdown {
     position: relative;
     width: 200px;
-    font-family: Arial, sans-serif;
 }
 
 .dropdown-toggle {
@@ -336,4 +335,12 @@ body {
 .logOut {
     margin-top: "10px";
     margin-left: "5px"
+}
+
+
+
+#introduction-to-focus-selection {
+    font-weight: 700;
+    line-height: '29px';
+    color: #3f3a4e;
 }
